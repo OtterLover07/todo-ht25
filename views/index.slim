@@ -1,1 +1,35 @@
+- if session[:admin]
+    form action="/new" method="get"
+        input type="submit" value="Add new todo"
+    hr
 
+form action="/" method="get"
+- if @query != nil
+    input name="q" placeholder="Search for todo" value=@query type="text"
+- else
+    input name="q" placeholder="Search for todo" type="text"
+input type="submit" value="Search"
+
+
+- if @todos.length == 0
+    - if @query != nil
+        h2 There are no todos named #{@query} in the database
+    - else
+        h2 There are no todos in the database
+- else
+    - @todos.each do |todo|
+        - if session[:admin]
+            h2 
+                a href="/#{todo["id"]}/edit" style="color:#666" #{todo["name"]}
+        - else
+            h2 #{todo["name"]}
+        - if todo["notes"] != ""
+            p Notes: #{todo["notes"]}
+        /##################### FIX THIS LATER ######################
+        form action="/" method="get" 
+            input type="submit" value="Mark Complete"
+        /###########################################################
+        - if session[:admin]
+            form action="/#{todo["id"]}/delete" method="post"
+                input type="submit" value="Delete"
+        hr

@@ -1,0 +1,8 @@
+h2 Todo Editor
+
+form action="/#{@todo["id"]}/edit" method="post"
+    input name="name" placeholder="Name of todo" type="text" value="#{@todo["name"]}"
+    br
+    input style="width: fit-content; min-width: 120px;" name="notes" placeholder="Notes" type="text" value="#{@todo["notes"]}"
+    br
+    input type="submit" value="Submit"
