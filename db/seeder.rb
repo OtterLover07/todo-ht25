@@ -22,13 +22,13 @@ def create_tables(db)
   db.execute('CREATE TABLE todos (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               name TEXT NOT NULL, 
-              description TEXT)')
+              notes TEXT, done BOOLEAN DEFAULT 0)')
 end
 
 def populate_tables(db)
-  db.execute('INSERT INTO todos (name, description) VALUES ("Köp mjölk", "3 liter mellanmjölk, eko")')
-  db.execute('INSERT INTO todos (name, description) VALUES ("Köp julgran", "En rödgran")')
-  db.execute('INSERT INTO todos (name, description) VALUES ("Pynta gran", "Glöm inte lamporna i granen och tomten")')
+  db.execute('INSERT INTO todos (name, notes) VALUES ("Add toggle complete", "Do this last")')
+  db.execute('INSERT INTO todos (name, notes) VALUES ("Add Edit functionality test", "if this is added stuff worked test")')
+  db.execute('INSERT INTO todos (name, notes) VALUES ("Add categories", "Searchable categories")')
 end
 
 seed!(db)

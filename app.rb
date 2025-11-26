@@ -22,9 +22,11 @@ require_relative 'login.rb'
 # Routen /
 get('/') do
   if (@query = params[:q]) != nil
-    @todos = db.execute("SELECT * FROM todos WHERE name LIKE ?","%#{@query.upcase}")
+    @unfinished = db.execute("SELECT * FROM todos WHERE (name,done) LIKE (?,0)","%#{@query.upcase}")
+    @finished = db.execute("SELECT * FROM todos WHERE (name,done) LIKE (?,1)","%#{@query.upcase}")
   else
-    @todos = db.execute("SELECT * FROM todos")
+    @unfinished = db.execute("SELECT * FROM todos WHERE done=0")
+    @finished = db.execute("SELECT * FROM todos WHERE done=1")
   end
 
   slim(:index)
@@ -37,7 +39,7 @@ end
 post('/new') do
     todo_info = [params[:name], params[:notes]]
 
-    if db.execute("INSERT INTO todos (name, notes) VALUES (?,?)",todo_info)
+    if db.execute("INSERT INTO todos (name, notes, done) VALUES (?,?,0)",todo_info)
         flash[:new] = "Info: todo successfully added"
     else
         flash[:new] = "Error: todo could not be added to database"
@@ -79,4 +81,19 @@ post('/:id/edit') do
         flash[:edit] = "Error: could not edit todo"
     end
     redirect('/')
+end
+
+post('/:id/toggledone') do
+  id = params[:id].to_i
+  status = db.execute("SELECT done FROM todos WHERE id=?",id).first
+  if status["done"] == 1
+    if db.execute("UPDATE todos SET done=0 WHERE id=?",id)
+      flash[:toggle] = "Info: todo succesfully marked incomplete"
+    end
+  elsif status["done"] == 0
+    if db.execute("UPDATE todos SET done=1 WHERE id=?",id)
+      flash[:toggle] = "Info: todo succesfully marked complete"
+    end
+  end
+  redirect('/')
 end

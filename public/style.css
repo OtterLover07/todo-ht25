@@ -5,3 +5,12 @@ body {
   font-size: x-large;
   margin: 1em;
 }
+.todo {
+  width: fit-content;
+  padding: 0px 10px 10px 10px;
+  border-radius: 20px;
+  background-color: red;
+}
+.finished {
+  background-color: limegreen;
+}

@@ -6,3 +6,6 @@ form action="/#{@todo["id"]}/edit" method="post"
     input style="width: fit-content; min-width: 120px;" name="notes" placeholder="Notes" type="text" value="#{@todo["notes"]}"
     br
     input type="submit" value="Submit"
+    input type="reset" value="Reset"
+form action="/" method="get"
+    input type="submit" value="Cancel"
