@@ -20,7 +20,7 @@ end
 require_relative 'login.rb'
 
 # Routen /
-get('/') do
+get('/') do #FRAMTIDA MELKER: BYGG SQL INPUT!
   if (@query = params[:q]) != nil
     @unfinished = db.execute("SELECT * FROM todos WHERE (name,done) LIKE (?,0)","%#{@query.upcase}")
     @finished = db.execute("SELECT * FROM todos WHERE (name,done) LIKE (?,1)","%#{@query.upcase}")
