@@ -8,11 +8,15 @@ enable :sessions
 
 # Funktion för att prata med databasen
 # Exempel på användning: db.execute('SELECT * FROM fruits')
-def db
+def db(hash = true)
   return @db if @db
 
   @db = SQLite3::Database.new("db/todos.db")
-  @db.results_as_hash = true
+  if hash
+    @db.results_as_hash = true
+  else
+    @db.results_as_hash = false
+  end
 
   return @db
 end
@@ -21,12 +25,26 @@ require_relative 'login.rb'
 
 # Routen /
 get('/') do #FRAMTIDA MELKER: BYGG SQL INPUT!
-  if (@query = params[:q]) != nil
-    @unfinished = db.execute("SELECT * FROM todos WHERE (name,done) LIKE (?,0)","%#{@query.upcase}")
-    @finished = db.execute("SELECT * FROM todos WHERE (name,done) LIKE (?,1)","%#{@query.upcase}")
+  if !["", nil].include?(@query = params[:q])
+    @unfinished = db.execute("SELECT * FROM todos WHERE name LIKE '%#{@query.upcase}%' AND done=0")
+    @finished = db.execute("SELECT * FROM todos WHERE name LIKE '%#{@query.upcase}%' AND done=1")
   else
     @unfinished = db.execute("SELECT * FROM todos WHERE done=0")
     @finished = db.execute("SELECT * FROM todos WHERE done=1")
+  end
+
+  @unfinished.each do |todo|
+    categories = db.execute("SELECT DISTINCT name FROM categories WHERE id IN (SELECT cat_id FROM todo_cat_rel WHERE todo_id == #{todo["id"]})").map{|x| x["name"]}
+    todo["category"] = categories
+  end
+  @finished.each do |todo|
+    categories = db.execute("SELECT DISTINCT name FROM categories WHERE id IN (SELECT cat_id FROM todo_cat_rel WHERE todo_id == #{todo["id"]})").map{|x| x["name"]}
+    todo["category"] = categories
+  end
+
+  if !["", nil].include?(catfilter = params[:cat])
+    @finished = @finished.reject{|todo| !todo["category"].include?(catfilter)}
+    @unfinished = @unfinished.reject{|todo| !todo["category"].include?(catfilter)}
   end
 
   slim(:index)
