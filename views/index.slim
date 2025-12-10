@@ -11,10 +11,8 @@ form action="/" method="get"
     / label for="cat" Search category
     select id="cat" name="cat"
         option value="" all categories
-        option value="development" development
-        option value="purchase" purchase
-        - if session[:admin]
-            option value="admin" admin
+        - @categories.each do |cat|
+            option value="#{cat["name"]}" #{cat["name"]}
     input type="submit" value="Search"
 
 

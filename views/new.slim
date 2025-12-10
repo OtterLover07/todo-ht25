@@ -1,10 +1,16 @@
 h2 Enter new todo
 
 form action="/new" method="post"
-    input name="name" placeholder="Name of todo" type="text"
+    input name="name" placeholder="Name of todo" type="text" required=true
     br
     input style="width: fit-content; min-width: 120px;" name="notes" placeholder="Notes" type="text"
     br
+    label for="cats" Categories:
+    ul id="cats"
+    - @categories.each do |category|
+        li style="margin-left: 30px"
+            label for=category["id"] #{category["name"]}
+            input type="checkbox" id=category["id"] name="cat[#{category["id"]}]" value=category["id"]
     input type="submit" value="Add to list"
     input type="reset" value="Reset"
 form action="/" method="get"

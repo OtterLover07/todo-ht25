@@ -5,6 +5,12 @@ form action="/#{@todo["id"]}/edit" method="post"
     br
     input style="width: fit-content; min-width: 120px;" name="notes" placeholder="Notes" type="text" value="#{@todo["notes"]}"
     br
+    label for="cats" Categories:
+    ul id="cats"
+    - @categories.each do |category|
+        li style="margin-left: 30px"
+            label for=category["id"] #{category["name"]}
+            input type="checkbox" id=category["id"] name="cat[#{category["id"]}]" value=category["id"]
     input type="submit" value="Submit"
     input type="reset" value="Reset"
 form action="/" method="get"

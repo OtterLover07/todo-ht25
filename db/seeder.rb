@@ -31,7 +31,8 @@ def create_tables(db)
               name TEXT NOT NULL)')
   db.execute('CREATE TABLE todo_cat_rel (
               todo_id INT NOT NULL,
-              cat_id INT NOT NULL)')
+              cat_id INT NOT NULL,
+              UNIQUE (todo_id, cat_id) ON CONFLICT IGNORE)')
   # db.execute('')
       
 end
