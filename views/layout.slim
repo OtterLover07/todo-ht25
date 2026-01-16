@@ -8,19 +8,12 @@ html lang="en"
   body 
     h1 Todo List
 
-    - if session[:admin]
-      form action="/logout" method="post"
-        input type="submit" value="Log out"
-      
-      - if flash.length != 0
-        hr
-        - flash.each do |key,value|
-          p #{value}
-    - else
-      form action="/login" method="post"
-        input name="pass" type="password" placeholder="Enter Admin Password"
-        input type="submit" value="Log in"
+    
+
+    - if session[:admin] && (flash.length != 0)
+      hr
+      - flash.each do |key,value|
+        p #{value}
 
     hr
-
   ==yield

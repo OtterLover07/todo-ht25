@@ -1,0 +1,24 @@
+h2 Register new user
+
+form action="/register" method="post"
+    input name="username" placeholder="Input Username" type="text" required=true
+    - if session[:username_fail]
+        p #{session[:username_fail]}
+    br
+    input name="password" placeholder="Input Password" type="password"
+    br
+    input name="pwd_confirm" placeholder="Confirm Password" type="password"
+    - if session[:pwd_fail]
+        p #{session[:pwd_fail]}
+    br
+    - if session[:admin]
+        input name="admin" value="true" id="admin" type="checkbox"
+        label for="admin" style="font-size: 12px" Make Administrator?
+        br
+
+    input type="submit" value="Register"
+    input type="reset" value="Reset"
+
+
+form action="/" method="get"
+    input type="submit" value="Cancel"

@@ -32,3 +32,8 @@ div.categories > p {
   margin-right: 2px;
   color: black;
 }
+form > p {
+  display: inline;
+  font-size: 12px;
+  color: red;
+}
