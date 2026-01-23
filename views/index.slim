@@ -1,16 +1,24 @@
-- if session[:user_id]
+- if session[:uid]
     form action="/logout" method="post"
         input type="submit" value="Log out"
+        - if flash[:login]
+            p style="color: green"   #{flash[:login]}
+    - if session[:admin]
+        form action="/register" method="get"
+            input type="submit" value="Register new user"
 - else
     form action="/login" method="post"
         input name="username" type="text" placeholder="Enter Username"
         input name="pwd" type="password" placeholder="Enter Password"
+        br
         input type="submit" value="Log in"
-form action="/register" method="get"
-    input type="submit" value="Sign up"
+        - if flash[:login]
+            p    #{flash[:login]}
+    form action="/register" method="get"
+        input type="submit" value="Sign up"
 hr
 
-- if session[:admin]
+- if session[:uid]
     form action="/new" method="get"
         input type="submit" value="Add new todo"
     hr
@@ -50,7 +58,7 @@ form action="/" method="get"
                 p Notes: #{todo["notes"]}
             form action="/#{todo["id"]}/toggledone" method="post" 
                 input type="submit" value="Mark Complete"
-            - if session[:admin]
+            - if session[:admin] || todo['belongs_to'] == session[:uid]
                 form action="/#{todo["id"]}/delete" method="post"
                     input type="submit" value="Delete"
     h2 Completed Items
@@ -69,6 +77,6 @@ form action="/" method="get"
                 p Notes: #{todo["notes"]}
             form action="/#{todo["id"]}/toggledone" method="post" 
                 input type="submit" value="Mark Incomplete"
-            - if session[:admin]
+            - if session[:admin] || (todo['belongs_to'] == session[:uid] && todo['belongs_to'] != nil)
                 form action="/#{todo["id"]}/delete" method="post"
                     input type="submit" value="Delete"

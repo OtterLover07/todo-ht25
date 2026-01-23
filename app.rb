@@ -53,6 +53,11 @@ get('/') do
     @unfinished = @unfinished.reject{|todo| !todo["category"].include?(catfilter)}
   end
 
+  if !session[:admin]
+    @finished = @finished.reject{|todo| ![nil, session[:uid]].include?(todo["belongs_to"])}
+    @unfinished = @unfinished.reject{|todo| ![nil, session[:uid]].include?(todo["belongs_to"])}
+  end
+
   slim(:index)
 end
 
@@ -66,8 +71,9 @@ post('/new') do
     if categories = params[:cat]
       categories = categories.values
     end
+    todo_info << (params[:private] ? session[:uid] : nil)
 
-    if db.execute("INSERT INTO todos (name, notes, done) VALUES (?,?,0)",todo_info)
+    if db.execute("INSERT INTO todos (name, notes, done, belongs_to) VALUES (?,?,0,?)",todo_info)
       if categories != nil
         todo_id = db.execute("SELECT id FROM todos WHERE name LIKE ?",todo_info[0]).last["id"]
         categories.each {|cat| db.execute("INSERT INTO todo_cat_rel (todo_id, cat_id) VALUES (?,?)",[todo_id,cat])}

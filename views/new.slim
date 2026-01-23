@@ -5,6 +5,10 @@ form action="/new" method="post"
     br
     input style="width: fit-content; min-width: 120px;" name="notes" placeholder="Notes" type="text"
     br
+    label for="priv" Make private?
+    input name="private" id="priv" type="checkbox" value=true
+    br
+    br
     label for="cats" Categories:
     ul id="cats"
     - @categories.each do |category|

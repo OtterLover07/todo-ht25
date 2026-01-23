@@ -12,8 +12,9 @@ html lang="en"
 
     - if session[:admin] && (flash.length != 0)
       hr
-      - flash.each do |key,value|
-        p #{value}
+      div style="background-color: aquamarine; margin: 0px; padding: 5px 10px; width:fit-content"
+        - flash.each do |key,value|
+          p style="font-size: 10px" #{value}
 
     hr
   ==yield

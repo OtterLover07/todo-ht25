@@ -26,15 +26,22 @@ post('/register') do
 end
 
 
-###################### FIXA LOGIN ####################
 post('/login') do
-    pwd = params[:pwd]
-    if pwd == "AdminPassword1234"
-        session[:user_id] = true #ÄNDRA SEN
-        session[:admin] = true
-        flash[:login] = "Info: Login successful"
+    pwd, username = params[:pwd], params[:username]
+    if !user = db.execute('SELECT * FROM users WHERE username=?', username.downcase).first
+        flash[:login] = "Login unsucessful: username does not exist"
+        redirect('/')
+    end
+    p user
+
+    if BCrypt::Password.new(user['pwd_digest']) == pwd
+        session[:uid] = user['user_id']
+        if user['admin'] == 1
+            session[:admin] = true
+        end
+        flash[:login] = "Login successful"
     else
-        flash[:login] = "Info: Login unsucessful"
+        flash[:login] = "Login unsucessful: Incorrect password"
     end
     redirect('/')
 end
