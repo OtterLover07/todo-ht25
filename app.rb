@@ -98,7 +98,7 @@ post('/:id/delete') do
 end
 
 get('/:id/edit') do
-  id = params[:id].to_i
+  id = params[:id].
   
   @todo = db.execute("SELECT * FROM todos WHERE id=?",id).first
   @categories = db.execute("SELECT * FROM categories")

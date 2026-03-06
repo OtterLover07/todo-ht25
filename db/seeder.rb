@@ -35,7 +35,7 @@ def create_tables(db)
               todo_id INT NOT NULL,
               cat_id INT NOT NULL,
               UNIQUE (todo_id, cat_id) ON CONFLICT IGNORE)')
-   db.execute('CREATE TABLE IF NOT EXISTS users (
+  db.execute('CREATE TABLE IF NOT EXISTS users (
               user_id INTEGER PRIMARY KEY AUTOINCREMENT,
               username TINYTEXT UNIQUE NOT NULL,
               pwd_digest TEXT NOT NULL,
@@ -56,6 +56,7 @@ end
 #   db.execute('INSERT INTO todo_cat_rel (todo_id, cat_id) VALUES (2, 2)')
 #   db.execute('INSERT INTO todo_cat_rel (todo_id, cat_id) VALUES (3, 2)')
 #   db.execute('INSERT INTO todo_cat_rel (todo_id, cat_id) VALUES (1, 1)')
+
 # end
 
 seed!(db)
